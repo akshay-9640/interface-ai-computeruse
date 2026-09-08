@@ -1,0 +1,23 @@
+<html>
+<head><title>Meridian Core - Account Opened</title></head>
+<body style="font-family: Tahoma, sans-serif; background:#d9d9d9;">
+<table width="100%" cellpadding="6" cellspacing="0" border="0" bgcolor="#003366">
+<tr><td><font color="white" size="4"><b>MERIDIAN CORE</b> &mdash; Servicing Console</font></td></tr>
+</table>
+<br/>
+<table align="center" width="500" cellpadding="8" cellspacing="0" border="1" bgcolor="#ffffff">
+<tr><td>
+<h3>Sub-Account Opened{% if via_override %} (via Supervisor Override){% endif %}</h3>
+<p>Confirmation: a new {{ account_type }} sub-account has been opened for
+{{ member.first_name }} {{ member.last_name }} ({{ member.member_id }}).</p>
+<table cellpadding="4" cellspacing="0" border="1">
+<tr><td>New Account Number</td><td>{{ account_number }}</td></tr>
+<tr><td>Account Type</td><td>{{ account_type }}</td></tr>
+<tr><td>Initial Deposit</td><td>${{ "%.2f"|format(deposit) }}</td></tr>
+</table>
+<br/>
+<p><a href="{{ url_for('member_detail', member_id=member.member_id) }}">&laquo; Back to Member</a></p>
+</td></tr>
+</table>
+</body>
+</html>

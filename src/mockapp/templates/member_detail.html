@@ -1,0 +1,29 @@
+<html>
+<head><title>Meridian Core - Member {{ member.member_id }}</title></head>
+<body style="font-family: Tahoma, sans-serif; background:#d9d9d9;">
+<table width="100%" cellpadding="6" cellspacing="0" border="0" bgcolor="#003366">
+<tr><td><font color="white" size="4"><b>MERIDIAN CORE</b> &mdash; Servicing Console</font></td>
+<td align="right"><font color="white"><a href="{{ url_for('logout') }}" style="color:white;">Sign Out</a></font></td></tr>
+</table>
+<br/>
+<table align="center" width="600" cellpadding="8" cellspacing="0" border="1" bgcolor="#ffffff">
+<tr><td>
+<p><a href="{{ url_for('search') }}">&laquo; Back to Search</a></p>
+<h3>Member {{ member.member_id }}: {{ member.first_name }} {{ member.last_name }}</h3>
+<p>Status: {{ member.status }}</p>
+
+<h4>Sub-Accounts</h4>
+<table width="100%" cellpadding="4" cellspacing="0" border="1">
+<tr bgcolor="#eeeeee"><td><b>Account #</b></td><td><b>Type</b></td><td><b>Balance</b></td></tr>
+{% for a in member.accounts %}
+<tr><td>{{ a.account_number }}</td><td>{{ a.account_type }}</td><td>${{ "%.2f"|format(a.balance) }}</td></tr>
+{% endfor %}
+</table>
+
+<br/>
+<a href="{{ url_for('new_subaccount', member_id=member.member_id) }}">Open New Sub-Account</a>
+
+</td></tr>
+</table>
+</body>
+</html>

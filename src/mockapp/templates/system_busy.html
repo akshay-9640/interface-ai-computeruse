@@ -1,0 +1,22 @@
+<html>
+<head><title>Meridian Core - System Busy</title></head>
+<body style="font-family: Tahoma, sans-serif; background:#d9d9d9;">
+<table width="100%" cellpadding="6" cellspacing="0" border="0" bgcolor="#003366">
+<tr><td><font color="white" size="4"><b>MERIDIAN CORE</b> &mdash; Servicing Console</font></td></tr>
+</table>
+<br/>
+<table align="center" width="500" cellpadding="8" cellspacing="0" border="1" bgcolor="#ffffff">
+<tr><td>
+<h3>System Temporarily Unavailable</h3>
+<p>The core system is busy processing another request for this member. Please wait a moment
+and try again. Your entered information has been preserved.</p>
+<form method="POST" action="{{ url_for('confirm_subaccount', member_id=member.member_id) }}">
+<input type="hidden" name="account_type" value="{{ account_type }}">
+<input type="hidden" name="deposit" value="{{ deposit }}">
+<input type="submit" value="Confirm and Open Account">
+</form>
+<p><a href="{{ url_for('member_detail', member_id=member.member_id) }}">&laquo; Back to Member</a></p>
+</td></tr>
+</table>
+</body>
+</html>

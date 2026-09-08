@@ -1,0 +1,60 @@
+# Configurable safety allowlist (assignment 3.4). Consulted by BOTH the discovery
+# agent (before it executes any LLM-chosen action) and the replay engine (at artifact
+# load time, and again before every navigate step) -- see src/policy/guardrails.py.
+#
+# Nothing here is a suggestion to the model: PolicyEngine.check_* raises and aborts
+# the run rather than asking the LLM to please not do the disallowed thing.
+
+allowed_domains:
+  - "127.0.0.1"
+  - "localhost"
+
+# Route prefixes the agent/replay may operate on. "/_reset" and the supervisor
+# override endpoint are intentionally excluded -- see notes below.
+allowed_route_prefixes:
+  - "/login"
+  - "/logout"
+  - "/search"
+  - "/members"
+
+# Routes explicitly blocked even though they share a prefix above. The supervisor
+# override endpoint exists so a HUMAN operator can complete a permission-denied flow
+# during an escalation handoff (src/escalation) -- the automated agent must never
+# reach it, which is why it is both denied here AND the agent is never given the PIN.
+blocked_routes:
+  - "/members/*/new-subaccount/override"
+  - "/_reset"
+
+allowed_action_types:
+  - navigate
+  - click
+  - type
+  - select
+  - wait_for
+  - assert_text
+  - extract
+
+# Action types the system supports in principle but that this deployment has not
+# allowlisted -- present so the policy engine has somewhere to say "not just
+# disallowed by domain, disallowed by kind."
+blocked_action_types:
+  - execute_script
+  - download_file
+  - upload_file
+
+# An action is classified "risky" (Section 3.4: "safe/reversible" vs "risky/
+# irreversible") if the target element's accessible name matches one of these
+# substrings, OR its action type is in risky_action_types. Risky actions are handled
+# conservatively: they require requires_confirmation=true on the artifact
+# (src/artifacts/schema.py) and, during discovery, the agent must not click past a
+# risky control without having already seen (and the human having approved, out of
+# band, by supplying the goal) that this is the intended terminal action.
+risky_name_patterns:
+  - "confirm"
+  - "submit override"
+  - "delete"
+  - "close account"
+  - "transfer"
+
+risky_action_types:
+  - click  # only when the resolved element name matches a risky_name_pattern

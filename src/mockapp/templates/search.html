@@ -1,0 +1,41 @@
+<html>
+<head><title>Meridian Core - Member Search</title></head>
+<body style="font-family: Tahoma, sans-serif; background:#d9d9d9;">
+<table width="100%" cellpadding="6" cellspacing="0" border="0" bgcolor="#003366">
+<tr><td><font color="white" size="4"><b>MERIDIAN CORE</b> &mdash; Servicing Console</font></td>
+<td align="right"><font color="white"><a href="{{ url_for('logout') }}" style="color:white;">Sign Out</a></font></td></tr>
+</table>
+<br/>
+<table align="center" width="600" cellpadding="8" cellspacing="0" border="1" bgcolor="#ffffff">
+<tr><td>
+<h3>Member Search</h3>
+<form method="GET" action="{{ url_for('search') }}">
+<table cellpadding="4" cellspacing="0" border="0">
+<tr><td>Member ID:</td><td><input type="text" name="q" size="20" value="{{ query }}"></td>
+<td><input type="submit" value="Search"></td></tr>
+</table>
+</form>
+
+{% if not_found %}
+<p><font color="red"><b>Record Not Found.</b> No member found matching ID "{{ query }}". Please verify
+the ID and try again.</font></p>
+{% endif %}
+
+{% if results %}
+<table width="100%" cellpadding="4" cellspacing="0" border="1">
+<tr bgcolor="#eeeeee"><td><b>Member ID</b></td><td><b>Name</b></td><td><b>Status</b></td><td></td></tr>
+{% for m in results %}
+<tr>
+<td>{{ m.member_id }}</td>
+<td>{{ m.first_name }} {{ m.last_name }}</td>
+<td>{{ m.status }}</td>
+<td><a href="{{ url_for('member_detail', member_id=m.member_id) }}">View Member</a></td>
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+
+</td></tr>
+</table>
+</body>
+</html>

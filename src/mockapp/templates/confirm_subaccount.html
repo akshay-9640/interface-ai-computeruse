@@ -1,0 +1,29 @@
+<html>
+<head><title>Meridian Core - Confirm New Sub-Account</title></head>
+<body style="font-family: Tahoma, sans-serif; background:#d9d9d9;">
+<table width="100%" cellpadding="6" cellspacing="0" border="0" bgcolor="#003366">
+<tr><td><font color="white" size="4"><b>MERIDIAN CORE</b> &mdash; Servicing Console</font></td></tr>
+</table>
+<br/>
+<table align="center" width="500" cellpadding="8" cellspacing="0" border="1" bgcolor="#ffffff">
+<tr><td>
+<h3>Confirm New Sub-Account</h3>
+<p>Please review before this irreversible action is submitted:</p>
+<table cellpadding="4" cellspacing="0" border="1">
+<tr><td>Member</td><td>{{ member.first_name }} {{ member.last_name }} ({{ member.member_id }})</td></tr>
+<tr><td>Account Type</td><td>{{ account_type }}</td></tr>
+<tr><td>Initial Deposit</td><td>${{ "%.2f"|format(deposit) }}</td></tr>
+</table>
+<br/>
+<form method="POST" action="{{ url_for('confirm_subaccount', member_id=member.member_id) }}">
+<input type="hidden" name="account_type" value="{{ account_type }}">
+<input type="hidden" name="deposit" value="{{ deposit }}">
+<input type="submit" value="Confirm and Open Account">
+</form>
+<form method="GET" action="{{ url_for('member_detail', member_id=member.member_id) }}">
+<input type="submit" value="Cancel">
+</form>
+</td></tr>
+</table>
+</body>
+</html>

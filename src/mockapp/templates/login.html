@@ -1,0 +1,27 @@
+<html>
+<head><title>Meridian Core - Sign In</title></head>
+<body style="font-family: Tahoma, sans-serif; background:#d9d9d9;">
+<table width="100%" cellpadding="6" cellspacing="0" border="0" bgcolor="#003366">
+<tr><td><font color="white" size="4"><b>MERIDIAN CORE</b> &mdash; Servicing Console</font></td></tr>
+</table>
+<br/>
+<table align="center" width="360" cellpadding="8" cellspacing="0" border="1" bgcolor="#ffffff">
+<tr><td>
+<h3>Operator Sign In</h3>
+{% if expired %}
+<p><font color="red">Your session has expired. Please log in again.</font></p>
+{% endif %}
+{% if error %}
+<p><font color="red">{{ error }}</font></p>
+{% endif %}
+<form method="POST" action="{{ url_for('login') }}">
+<table cellpadding="4" cellspacing="0" border="0">
+<tr><td>Username:</td><td><input type="text" name="username" size="20"></td></tr>
+<tr><td>Password:</td><td><input type="password" name="password" size="20"></td></tr>
+<tr><td colspan="2" align="right"><input type="submit" value="Sign In"></td></tr>
+</table>
+</form>
+</td></tr>
+</table>
+</body>
+</html>

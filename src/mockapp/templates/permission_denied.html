@@ -1,0 +1,35 @@
+<html>
+<head><title>Meridian Core - Permission Denied</title></head>
+<body style="font-family: Tahoma, sans-serif; background:#d9d9d9;">
+<table width="100%" cellpadding="6" cellspacing="0" border="0" bgcolor="#003366">
+<tr><td><font color="white" size="4"><b>MERIDIAN CORE</b> &mdash; Servicing Console</font></td></tr>
+</table>
+<br/>
+<table align="center" width="500" cellpadding="8" cellspacing="0" border="1" bgcolor="#ffffff">
+<tr><td>
+<h3>Permission Denied</h3>
+<p>Member {{ member.member_id }} is flagged <b>restricted</b>. Opening a new sub-account for
+this member requires supervisor approval and cannot be completed by a standard operator
+session.</p>
+{% if override_error %}
+<p><font color="red">{{ override_error }}</font></p>
+{% endif %}
+<p><i>Supervisor Override</i> (requires a supervisor PIN known only to a human supervisor --
+not available to this session):</p>
+<form method="POST" action="{{ url_for('override_subaccount', member_id=member.member_id) }}">
+<table cellpadding="4" cellspacing="0" border="0">
+<tr><td>Supervisor PIN:</td><td><input type="password" name="supervisor_pin" size="10"></td></tr>
+<tr><td>Account Type:</td><td>
+<select name="account_type">
+<option value="Checking">Checking</option>
+<option value="Savings">Savings</option>
+</select>
+</td></tr>
+<tr><td colspan="2" align="right"><input type="submit" value="Submit Override"></td></tr>
+</table>
+</form>
+<p><a href="{{ url_for('member_detail', member_id=member.member_id) }}">&laquo; Back to Member</a></p>
+</td></tr>
+</table>
+</body>
+</html>

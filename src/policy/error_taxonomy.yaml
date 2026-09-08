@@ -1,0 +1,47 @@
+# App-level default error taxonomy, keyed by target app_name.
+#
+# Why this lives outside any single artifact: runtime error pages (not-found,
+# validation, permission-denied, session-timeout, transient-busy) are a property of
+# the TARGET APPLICATION, not of any one recorded flow -- every capability recorded
+# against "Meridian Core" can hit a not-found page even if the discovery run that
+# produced it never did. The replay engine (src/replay/errors.py) merges these
+# app-level defaults with any handlers declared on the artifact itself (artifact-level
+# handlers win on handler_id collision, so a capability can override/tighten a
+# default). See REPORT.md, "Determinism & error handling" and "Heterogeneity &
+# multi-tenant" -- this is also the seam that lets a shared vendor product's error
+# signatures be authored once and reused across tenants running that product.
+
+meridian_core:
+  - handler_id: member_not_found
+    match_text: "Record Not Found"
+    classification: business_outcome
+    label: "No member found for the given ID."
+    outputs_on_match:
+      found: "false"
+
+  - handler_id: invalid_deposit
+    match_text: "Initial deposit must be a number of at least"
+    classification: business_outcome
+    label: "The submitted deposit amount failed validation."
+
+  - handler_id: invalid_account_type
+    match_text: "Please choose an account type"
+    classification: business_outcome
+    label: "No account type was selected."
+
+  - handler_id: permission_denied
+    match_text: "Permission Denied"
+    classification: hard_failure
+    label: "Member is restricted; requires supervisor override (see escalation path)."
+
+  - handler_id: system_busy
+    match_text: "System Temporarily Unavailable"
+    classification: recoverable
+    label: "Transient backend busy signal; safe to wait and retry the last step."
+    recovery: wait_and_retry
+    max_retries: 2
+
+  - handler_id: session_expired
+    match_text: "Your session has expired"
+    classification: hard_failure
+    label: "Session/auth expired mid-replay; needs re-authentication (not auto-handled -- see REPORT.md Cuts)."
