@@ -1,0 +1,71 @@
+{
+  "status": "success",
+  "capability_id": "open_member_subaccount",
+  "outputs": {
+    "account_number": "SAV-10001-03"
+  },
+  "label": null,
+  "failed_step_id": null,
+  "expected": null,
+  "observed": null,
+  "escalation_used": false,
+  "evidence_dir": "/home/claude/interface-ai-computeruse/evidence/sessions/replay-20260908T200243-0d30dd",
+  "trace": [
+    {
+      "step_id": "step_01_type",
+      "action": "type",
+      "status": "ok",
+      "detail": "no error handler matched",
+      "screenshot_path": null
+    },
+    {
+      "step_id": "step_02_click",
+      "action": "click",
+      "status": "ok",
+      "detail": "no error handler matched",
+      "screenshot_path": null
+    },
+    {
+      "step_id": "step_03_click",
+      "action": "click",
+      "status": "ok",
+      "detail": "no error handler matched",
+      "screenshot_path": null
+    },
+    {
+      "step_id": "step_04_click",
+      "action": "click",
+      "status": "ok",
+      "detail": "no error handler matched",
+      "screenshot_path": null
+    },
+    {
+      "step_id": "step_05_select",
+      "action": "select",
+      "status": "ok",
+      "detail": "no error handler matched",
+      "screenshot_path": null
+    },
+    {
+      "step_id": "step_06_type",
+      "action": "type",
+      "status": "ok",
+      "detail": "no error handler matched",
+      "screenshot_path": null
+    },
+    {
+      "step_id": "step_07_click",
+      "action": "click",
+      "status": "ok",
+      "detail": "no error handler matched",
+      "screenshot_path": null
+    },
+    {
+      "step_id": "step_confirm_finalize",
+      "action": "click",
+      "status": "ok",
+      "detail": "no error handler matched",
+      "screenshot_path": null
+    }
+  ]
+}

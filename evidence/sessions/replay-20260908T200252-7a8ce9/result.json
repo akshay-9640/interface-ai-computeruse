@@ -1,0 +1,29 @@
+{
+  "status": "business_outcome",
+  "capability_id": "open_member_subaccount",
+  "outputs": {
+    "found": "false"
+  },
+  "label": "No member found for the given ID.",
+  "failed_step_id": null,
+  "expected": null,
+  "observed": null,
+  "escalation_used": false,
+  "evidence_dir": "/home/claude/interface-ai-computeruse/evidence/sessions/replay-20260908T200252-7a8ce9",
+  "trace": [
+    {
+      "step_id": "step_01_type",
+      "action": "type",
+      "status": "ok",
+      "detail": "no error handler matched",
+      "screenshot_path": null
+    },
+    {
+      "step_id": "step_02_click",
+      "action": "click",
+      "status": "matched_handler",
+      "detail": "handler 'member_not_found' matched",
+      "screenshot_path": null
+    }
+  ]
+}

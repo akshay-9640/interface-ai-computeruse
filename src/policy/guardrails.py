@@ -44,6 +44,25 @@ def redact_field(field_name: str, value: str) -> str:
     return redact(value)
 
 
+def redact_deep(obj):
+    """Recursively applies the generic pattern-based `redact` to every string in a
+    nested dict/list -- the safety-net pass used before ANYTHING is written to
+    disk (evidence logs, control-state files). This catches secrets that are
+    *shaped* like a secret (an SSN, a "PIN: 1234" phrase) wherever they appear.
+    It deliberately does NOT know about field semantics (e.g. that a "text" value
+    is sensitive because a sibling "element" key says "Supervisor PIN:") -- that
+    context-aware case is handled at the call site instead (see
+    src/escalation/operator.py, which redacts a typed value by the target
+    element's field_name BEFORE it ever reaches here)."""
+    if isinstance(obj, str):
+        return redact(obj)
+    if isinstance(obj, dict):
+        return {k: redact_deep(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [redact_deep(v) for v in obj]
+    return obj
+
+
 class PolicyViolation(Exception):
     pass
 

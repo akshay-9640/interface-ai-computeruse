@@ -1,0 +1,5 @@
+{"ts": 1788897772.4080806, "event": "run_started", "kind": "replay", "label": "open_member_subaccount"}
+{"ts": 1788897774.572744, "event": "auto_login", "base_url": "http://127.0.0.1:5001"}
+{"ts": 1788897774.5729525, "event": "params_bound", "member_id": "99999", "account_type": "Savings", "initial_deposit": 100.0}
+{"ts": 1788897774.6843753, "event": "step_executed", "step_id": "step_01_type", "action": "type", "url": "http://127.0.0.1:5001/search", "matched_handler": null}
+{"ts": 1788897775.2993233, "event": "step_executed", "step_id": "step_02_click", "action": "click", "url": "http://127.0.0.1:5001/search?q=99999", "matched_handler": "member_not_found"}

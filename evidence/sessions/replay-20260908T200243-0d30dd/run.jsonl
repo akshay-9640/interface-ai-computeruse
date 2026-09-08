@@ -1,0 +1,12 @@
+{"ts": 1788897763.9856057, "event": "run_started", "kind": "replay", "label": "open_member_subaccount"}
+{"ts": 1788897766.102025, "event": "auto_login", "base_url": "http://127.0.0.1:5001"}
+{"ts": 1788897766.1022575, "event": "params_bound", "member_id": "10001", "account_type": "Savings", "initial_deposit": 100.0}
+{"ts": 1788897766.255132, "event": "step_executed", "step_id": "step_01_type", "action": "type", "url": "http://127.0.0.1:5001/search", "matched_handler": null}
+{"ts": 1788897766.895427, "event": "step_executed", "step_id": "step_02_click", "action": "click", "url": "http://127.0.0.1:5001/search?q=10001", "matched_handler": null}
+{"ts": 1788897767.53245, "event": "step_executed", "step_id": "step_03_click", "action": "click", "url": "http://127.0.0.1:5001/members/10001", "matched_handler": null}
+{"ts": 1788897768.1710224, "event": "step_executed", "step_id": "step_04_click", "action": "click", "url": "http://127.0.0.1:5001/members/10001/new-subaccount", "matched_handler": null}
+{"ts": 1788897768.2592793, "event": "step_executed", "step_id": "step_05_select", "action": "select", "url": "http://127.0.0.1:5001/members/10001/new-subaccount", "matched_handler": null}
+{"ts": 1788897768.3303175, "event": "step_executed", "step_id": "step_06_type", "action": "type", "url": "http://127.0.0.1:5001/members/10001/new-subaccount", "matched_handler": null}
+{"ts": 1788897768.956603, "event": "step_executed", "step_id": "step_07_click", "action": "click", "url": "http://127.0.0.1:5001/members/10001/new-subaccount", "matched_handler": null}
+{"ts": 1788897769.599981, "event": "step_executed", "step_id": "step_confirm_finalize", "action": "click", "url": "http://127.0.0.1:5001/members/10001/new-subaccount/confirm", "matched_handler": null}
+{"ts": 1788897769.6484604, "event": "post_confirmation_verified", "outputs": {"account_number": "SAV-10001-03"}}

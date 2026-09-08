@@ -1,0 +1,33 @@
+{
+  "controller": "agent",
+  "cdp_port": 46367,
+  "reason": "Member is restricted; requires supervisor override (see escalation path).",
+  "context": {
+    "phase": "replay",
+    "capability_id": "open_member_subaccount",
+    "step": "step_04_click",
+    "screenshot": "/home/claude/interface-ai-computeruse/evidence/sessions/replay-20260908T200440-37508c/screenshots/1788897884797_step_04_click_escalate.png",
+    "operator_hint": "Run: python manage.py operator --run-dir /home/claude/interface-ai-computeruse/evidence/sessions/replay-20260908T200440-37508c"
+  },
+  "human_actions": [
+    {
+      "action": "type",
+      "element": "Supervisor PIN:",
+      "text": "[REDACTED]",
+      "ts": 1788897889.983292
+    },
+    {
+      "action": "select",
+      "element": "Account Type:",
+      "value": "Checking",
+      "ts": 1788897890.3921962
+    },
+    {
+      "action": "click",
+      "element": "Submit Override",
+      "ts": 1788897890.4859102
+    }
+  ],
+  "updated_at": 1788897891.0010715,
+  "resolution": "completed"
+}

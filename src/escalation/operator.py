@@ -15,6 +15,7 @@ from pathlib import Path
 from src.escalation.control import ControlChannel
 from src.perception.snapshot import capture
 from src.perception import locate
+from src.policy.guardrails import redact_field
 from src.runtime.browser_session import BrowserSession
 
 
@@ -96,7 +97,12 @@ def run_operator_session(run_dir: str) -> None:
                     elif cmd == "type":
                         text = parts[2] if len(parts) > 2 else ""
                         resolved.locator.fill(text)
-                        control.append_human_action({"action": "type", "element": element.name, "text": text})
+                        # Log what the field NAME was, never the raw value typed into it,
+                        # when that field is sensitive (e.g. a supervisor PIN) -- the real
+                        # value only ever goes to the browser, never to control.json/evidence.
+                        # See src/policy/guardrails.py:redact_field and REPORT.md, "Safety".
+                        logged_text = redact_field(element.field_name or "", text)
+                        control.append_human_action({"action": "type", "element": element.name, "text": logged_text})
                     elif cmd == "select":
                         value = parts[2] if len(parts) > 2 else ""
                         resolved.locator.select_option(value=value)

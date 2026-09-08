@@ -5,5 +5,4 @@ __pycache__/
 venv/
 *.egg-info/
 .DS_Store
-evidence/sessions/*/control.json
 node_modules/

@@ -28,6 +28,8 @@ from dataclasses import dataclass, field, asdict
 from pathlib import Path
 from typing import Any, Optional
 
+from src.policy.guardrails import redact_deep
+
 
 @dataclass
 class ControlState:
@@ -46,7 +48,13 @@ class ControlChannel:
 
     def write(self, state: ControlState) -> None:
         state.updated_at = time.time()
-        self.path.write_text(json.dumps(asdict(state), indent=2))
+        # Safety-net redaction pass (assignment 3.4) before this hits disk. It's a
+        # net, not the primary control: the precise, context-aware redaction (a
+        # typed value is sensitive because of WHICH field it was typed into)
+        # happens at the call site -- see src/escalation/operator.py -- since this
+        # generic pass only catches values that are independently shaped like a
+        # secret, not ones that are only sensitive by context.
+        self.path.write_text(json.dumps(redact_deep(asdict(state)), indent=2))
 
     def read(self) -> ControlState:
         data = json.loads(self.path.read_text())

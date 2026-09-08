@@ -1,0 +1,43 @@
+{
+  "status": "success",
+  "capability_id": "open_member_subaccount",
+  "outputs": {
+    "account_number": "CHK-10002-02"
+  },
+  "label": "completed_via_human_operator",
+  "failed_step_id": null,
+  "expected": null,
+  "observed": null,
+  "escalation_used": true,
+  "evidence_dir": "/home/claude/interface-ai-computeruse/evidence/sessions/replay-20260908T200440-37508c",
+  "trace": [
+    {
+      "step_id": "step_01_type",
+      "action": "type",
+      "status": "ok",
+      "detail": "no error handler matched",
+      "screenshot_path": null
+    },
+    {
+      "step_id": "step_02_click",
+      "action": "click",
+      "status": "ok",
+      "detail": "no error handler matched",
+      "screenshot_path": null
+    },
+    {
+      "step_id": "step_03_click",
+      "action": "click",
+      "status": "ok",
+      "detail": "no error handler matched",
+      "screenshot_path": null
+    },
+    {
+      "step_id": "step_04_click",
+      "action": "click",
+      "status": "matched_handler",
+      "detail": "handler 'permission_denied' matched",
+      "screenshot_path": null
+    }
+  ]
+}

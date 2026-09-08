@@ -18,7 +18,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Optional
 
-from src.policy.guardrails import redact
+from src.policy.guardrails import redact_deep
 
 EVIDENCE_ROOT = Path(__file__).resolve().parents[2] / "evidence" / "sessions"
 
@@ -42,7 +42,7 @@ class RunLogger:
         return self.dir / "screenshots" / f"{int(time.time() * 1000)}_{tag}.png"
 
     def event(self, event_type: str, data: dict[str, Any]) -> None:
-        safe_data = _redact_deep(data)
+        safe_data = redact_deep(data)
         record = {
             "ts": time.time(),
             "event": event_type,
@@ -53,15 +53,5 @@ class RunLogger:
 
     def write_result(self, result: dict[str, Any]) -> Path:
         p = self.dir / "result.json"
-        p.write_text(json.dumps(_redact_deep(result), indent=2, default=str))
+        p.write_text(json.dumps(redact_deep(result), indent=2, default=str))
         return p
-
-
-def _redact_deep(obj: Any) -> Any:
-    if isinstance(obj, str):
-        return redact(obj)
-    if isinstance(obj, dict):
-        return {k: _redact_deep(v) for k, v in obj.items()}
-    if isinstance(obj, list):
-        return [_redact_deep(v) for v in obj]
-    return obj
