@@ -274,6 +274,21 @@ password fields; sensitive field names (`password`, `supervisor_pin`, `ssn`,
 conservative -- false positives are cheap, a leaked credential in a log
 directory is not.
 
+This layering caught a real bug during my own pre-submission review: the
+escalation demo's `control.json` had logged the human-entered supervisor PIN
+in plaintext, because the generic pattern expects `"PIN: 1234"` as adjacent
+text, and the actual structure was JSON with the field's label and its typed
+value in separate keys (`{"element": "Supervisor PIN:", "text": "4242"}`) --
+shaped nothing like the pattern, so the regex pass never saw it as sensitive.
+The fix is context-aware redaction at the point of capture:
+`src/escalation/operator.py` now calls `redact_field(element.field_name,
+text)` -- using the *target element's* field name, not the typed string's
+shape -- before a human-typed value is ever logged, so anything typed into a
+field named `supervisor_pin` is masked regardless of what it looks like.
+`redact_deep`, applied in `ControlChannel.write()`, stays as an independent
+second pass over the whole state object for anything still pattern-shaped;
+neither layer is trusted to be sufficient alone.
+
 **Limits.** The redaction patterns are regex heuristics, not a real PII
 classifier -- they'd miss anything not shaped like the patterns I anticipated.
 The allowlist is a single static YAML file, not scoped per-tenant or
