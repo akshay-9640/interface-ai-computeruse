@@ -11,6 +11,30 @@ See [`REPORT.md`](REPORT.md) for the design write-up (architecture, artifact
 schema, determinism/error handling, heterogeneity & multi-tenant story,
 escalation model, safety guardrails, and what was cut).
 
+## Live demo
+
+A public, no-LLM version of the demo path below runs as a small web console
+(`demo/`): visitors replay the saved capability against a private Meridian Core
+instance, watch each step and screenshot, and play the human supervisor in the
+escalation scenario (the console pipes the exact operator commands from step 3
+into the real `manage.py operator`, attached to the same paused browser). It also
+shows the saved discovery run, with Claude's stated reasoning per step, and the
+artifact JSON. Nothing calls an LLM, so it needs no API key and costs nothing per visit.
+
+Run it locally:
+
+```bash
+pip install -r requirements-demo.txt
+playwright install chromium
+gunicorn -w 1 --threads 8 -b 127.0.0.1:8080 demo.server:app   # open http://127.0.0.1:8080
+```
+
+Deploy it: the repo has a `Dockerfile` and a Render blueprint (`render.yaml`).
+On Render, New > Blueprint > this repo, free plan, no environment variables.
+Guardrails for a public URL: one run at a time, a per-IP rate limit, hard
+timeouts, mock state reset before every run, an unanswered escalation is handed
+back as "abandoned" after 90 seconds, and only the last 25 demo runs are kept.
+
 ## What's in here
 
 ```

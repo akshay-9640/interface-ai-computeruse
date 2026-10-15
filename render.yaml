@@ -1,0 +1,8 @@
+# Render blueprint: New > Blueprint > pick this repo. Free plan, no secrets needed.
+services:
+  - type: web
+    name: interface-ai-computeruse-demo
+    runtime: docker
+    plan: free
+    healthCheckPath: /healthz
+    autoDeploy: true
