@@ -3,13 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#003366">
 <title>Computer-Use Replay Demo</title>
 <meta name="description" content="An LLM agent discovers a legacy banking workflow once; this demo replays it deterministically with no LLM, with error handling and a live human handoff.">
 <style>
   :root {
-    --bg: #0b0f17; --card: #121826; --line: rgba(230,237,243,.10); --ink: #e6edf3;
-    --muted: rgba(230,237,243,.6); --faint: rgba(230,237,243,.4);
-    --ok: #3fb950; --warn: #d29922; --bad: #f85149; --info: #79c0ff;
+    --bg: #f4f6f9; --card: #ffffff; --line: rgba(10,37,64,.12); --ink: #0a2540;
+    --muted: rgba(10,37,64,.72); --faint: rgba(10,37,64,.52); --navy: #003366;
+    --ok: #1a7f37; --warn: #9a6700; --bad: #cf222e; --info: #0969da;
     --r-lg: 16px; --r-md: 12px; --r-sm: 8px;
   }
   * { box-sizing: border-box; }
@@ -25,17 +26,18 @@
   .links a:hover { color: var(--ink); }
   nav.tabs { display: flex; gap: 4px; margin: 32px 0 20px; border-bottom: 1px solid var(--line); overflow-x: auto; }
   nav.tabs button { background: none; border: 0; color: var(--muted); padding: 10px 14px; font: inherit; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; }
-  nav.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ink); }
+  nav.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--navy); font-weight: 600; }
   .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 16px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 16px; box-shadow: 0 1px 2px rgba(10,37,64,.04); }
   .scenario { display: flex; flex-direction: column; gap: 8px; }
   .scenario h3 { margin: 0; font-size: 16px; letter-spacing: -0.01em; }
   .scenario p { margin: 0; color: var(--muted); font-size: 14px; }
   .params { font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--faint); }
-  .btn { margin-top: auto; align-self: flex-start; background: var(--ink); color: var(--bg); border: 0; border-radius: 999px; padding: 9px 16px; font: 600 14px system-ui, sans-serif; cursor: pointer; transition: transform .1s ease-out, opacity .15s; }
+  .btn { margin-top: auto; align-self: flex-start; background: var(--navy); color: #fff; border: 0; border-radius: 999px; padding: 9px 16px; font: 600 14px system-ui, sans-serif; cursor: pointer; transition: transform .1s ease-out, opacity .15s; }
   .btn:active { transform: scale(.97); }
   .btn:disabled { opacity: .4; cursor: not-allowed; }
-  .btn.ghost { background: none; color: var(--ink); border: 1px solid rgba(230,237,243,.3); }
+  .btn.ghost { background: none; color: var(--ink); border: 1px solid var(--line); }
+  .btn:hover:not(:disabled) { background: #0a2540; }
   #run { margin-top: 20px; display: none; }
   .runhead { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
   .runhead h2 { margin: 0; font-size: 18px; letter-spacing: -0.015em; }
@@ -55,7 +57,7 @@
   .thumbs { display: flex; gap: 6px; overflow-x: auto; margin-top: 8px; padding-bottom: 4px; }
   .thumbs img { height: 54px; aspect-ratio: 16 / 8; object-fit: cover; object-position: top center; border-radius: 6px; border: 1px solid var(--line); cursor: pointer; opacity: .6; }
   .thumbs img.on { opacity: 1; border-color: var(--ink); }
-  .esc { border-color: rgba(210,153,34,.5); margin-top: 12px; }
+  .esc { border-color: rgba(154,103,0,.45); background: #fffbf0; margin-top: 12px; }
   .esc h3 { margin: 0 0 6px; font-size: 16px; }
   .result dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; margin: 0; font-size: 14px; }
   .result dt { color: var(--faint); }
