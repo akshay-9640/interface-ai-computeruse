@@ -1,0 +1,207 @@
+{
+ "scenario": "confirm",
+ "title": "Replay with confirm=True",
+ "events": [
+  {
+   "ts": 1792080377.605132,
+   "event": "run_started",
+   "kind": "replay",
+   "label": "open_member_subaccount"
+  },
+  {
+   "ts": 1792080379.725205,
+   "event": "auto_login",
+   "base_url": "http://127.0.0.1:5001"
+  },
+  {
+   "ts": 1792080379.725705,
+   "event": "params_bound",
+   "member_id": "10001",
+   "account_type": "Savings",
+   "initial_deposit": 100.0
+  },
+  {
+   "ts": 1792080379.803862,
+   "event": "step_executed",
+   "step_id": "step_01_type",
+   "action": "type",
+   "url": "http://127.0.0.1:5001/search",
+   "matched_handler": null
+  },
+  {
+   "ts": 1792080380.410914,
+   "event": "step_executed",
+   "step_id": "step_02_click",
+   "action": "click",
+   "url": "http://127.0.0.1:5001/search?q=10001",
+   "matched_handler": null
+  },
+  {
+   "ts": 1792080381.0034401,
+   "event": "step_executed",
+   "step_id": "step_03_click",
+   "action": "click",
+   "url": "http://127.0.0.1:5001/members/10001",
+   "matched_handler": null
+  },
+  {
+   "ts": 1792080381.578969,
+   "event": "step_executed",
+   "step_id": "step_04_click",
+   "action": "click",
+   "url": "http://127.0.0.1:5001/members/10001/new-subaccount",
+   "matched_handler": null
+  },
+  {
+   "ts": 1792080381.628491,
+   "event": "step_executed",
+   "step_id": "step_05_select",
+   "action": "select",
+   "url": "http://127.0.0.1:5001/members/10001/new-subaccount",
+   "matched_handler": null
+  },
+  {
+   "ts": 1792080381.660634,
+   "event": "step_executed",
+   "step_id": "step_06_type",
+   "action": "type",
+   "url": "http://127.0.0.1:5001/members/10001/new-subaccount",
+   "matched_handler": null
+  },
+  {
+   "ts": 1792080382.269251,
+   "event": "step_executed",
+   "step_id": "step_07_click",
+   "action": "click",
+   "url": "http://127.0.0.1:5001/members/10001/new-subaccount",
+   "matched_handler": null
+  },
+  {
+   "ts": 1792080382.884238,
+   "event": "step_executed",
+   "step_id": "step_confirm_finalize",
+   "action": "click",
+   "url": "http://127.0.0.1:5001/members/10001/new-subaccount/confirm",
+   "matched_handler": null
+  },
+  {
+   "ts": 1792080382.9130151,
+   "event": "post_confirmation_verified",
+   "outputs": {
+    "account_number": "SAV-10001-03"
+   }
+  }
+ ],
+ "shots": [
+  {
+   "name": "1792080379769_step_01_type.png",
+   "ts": 1792080379.769
+  },
+  {
+   "name": "1792080380366_step_02_click.png",
+   "ts": 1792080380.366
+  },
+  {
+   "name": "1792080380960_step_03_click.png",
+   "ts": 1792080380.96
+  },
+  {
+   "name": "1792080381536_step_04_click.png",
+   "ts": 1792080381.536
+  },
+  {
+   "name": "1792080381595_step_05_select.png",
+   "ts": 1792080381.595
+  },
+  {
+   "name": "1792080381639_step_06_type.png",
+   "ts": 1792080381.639
+  },
+  {
+   "name": "1792080382226_step_07_click.png",
+   "ts": 1792080382.226
+  },
+  {
+   "name": "1792080382839_step_confirm_finalize.png",
+   "ts": 1792080382.839
+  },
+  {
+   "name": "1792080382884_final_checkpoint.png",
+   "ts": 1792080382.884
+  }
+ ],
+ "result": {
+  "capability_id": "open_member_subaccount",
+  "escalation_used": false,
+  "evidence_dir": "/Users/akshay/Desktop/Projects/interface-ai-computeruse-final/evidence/sessions/replay-20261015T120617-65ffda",
+  "expected": null,
+  "failed_step_id": null,
+  "label": null,
+  "observed": null,
+  "outputs": {
+   "account_number": "SAV-10001-03"
+  },
+  "status": "success",
+  "trace": [
+   {
+    "action": "type",
+    "detail": "no error handler matched",
+    "screenshot_path": null,
+    "status": "ok",
+    "step_id": "step_01_type"
+   },
+   {
+    "action": "click",
+    "detail": "no error handler matched",
+    "screenshot_path": null,
+    "status": "ok",
+    "step_id": "step_02_click"
+   },
+   {
+    "action": "click",
+    "detail": "no error handler matched",
+    "screenshot_path": null,
+    "status": "ok",
+    "step_id": "step_03_click"
+   },
+   {
+    "action": "click",
+    "detail": "no error handler matched",
+    "screenshot_path": null,
+    "status": "ok",
+    "step_id": "step_04_click"
+   },
+   {
+    "action": "select",
+    "detail": "no error handler matched",
+    "screenshot_path": null,
+    "status": "ok",
+    "step_id": "step_05_select"
+   },
+   {
+    "action": "type",
+    "detail": "no error handler matched",
+    "screenshot_path": null,
+    "status": "ok",
+    "step_id": "step_06_type"
+   },
+   {
+    "action": "click",
+    "detail": "no error handler matched",
+    "screenshot_path": null,
+    "status": "ok",
+    "step_id": "step_07_click"
+   },
+   {
+    "action": "click",
+    "detail": "no error handler matched",
+    "screenshot_path": null,
+    "status": "ok",
+    "step_id": "step_confirm_finalize"
+   }
+  ]
+ },
+ "control": null,
+ "elapsed": 6.4,
+ "source_run": "replay-20261015T120617-65ffda"
+}

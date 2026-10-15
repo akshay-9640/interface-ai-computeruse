@@ -1,0 +1,188 @@
+{
+ "scenario": "escalation",
+ "title": "Restricted member, human escalation",
+ "events": [
+  {
+   "ts": 1792080388.010446,
+   "event": "run_started",
+   "kind": "replay",
+   "label": "open_member_subaccount"
+  },
+  {
+   "ts": 1792080389.9464278,
+   "event": "auto_login",
+   "base_url": "http://127.0.0.1:5001"
+  },
+  {
+   "ts": 1792080389.947258,
+   "event": "params_bound",
+   "member_id": "10002",
+   "account_type": "Checking",
+   "initial_deposit": 100.0
+  },
+  {
+   "ts": 1792080390.025314,
+   "event": "step_executed",
+   "step_id": "step_01_type",
+   "action": "type",
+   "url": "http://127.0.0.1:5001/search",
+   "matched_handler": null
+  },
+  {
+   "ts": 1792080390.635778,
+   "event": "step_executed",
+   "step_id": "step_02_click",
+   "action": "click",
+   "url": "http://127.0.0.1:5001/search?q=10002",
+   "matched_handler": null
+  },
+  {
+   "ts": 1792080391.2270222,
+   "event": "step_executed",
+   "step_id": "step_03_click",
+   "action": "click",
+   "url": "http://127.0.0.1:5001/members/10002",
+   "matched_handler": null
+  },
+  {
+   "ts": 1792080391.804621,
+   "event": "step_executed",
+   "step_id": "step_04_click",
+   "action": "click",
+   "url": "http://127.0.0.1:5001/members/10002/new-subaccount",
+   "matched_handler": "permission_denied"
+  },
+  {
+   "ts": 1792080391.837062,
+   "event": "escalation_requested",
+   "step_id": "step_04_click",
+   "reason": "Member is restricted; requires supervisor override (see escalation path)."
+  },
+  {
+   "ts": 1792080395.856724,
+   "event": "escalation_resolved",
+   "resolution": "completed",
+   "human_actions": [
+    {
+     "action": "type",
+     "element": "Supervisor PIN:",
+     "text": "[REDACTED]",
+     "ts": 1792080393.8349388
+    },
+    {
+     "action": "select",
+     "element": "Account Type:",
+     "value": "Checking",
+     "ts": 1792080394.3231528
+    },
+    {
+     "action": "click",
+     "element": "Submit Override",
+     "ts": 1792080394.3690538
+    }
+   ]
+  },
+  {
+   "ts": 1792080395.900036,
+   "event": "finalized_via_escalation",
+   "outputs": {
+    "account_number": "CHK-10002-02"
+   },
+   "path": "output_match"
+  }
+ ],
+ "shots": [
+  {
+   "name": "1792080389991_step_01_type.png",
+   "ts": 1792080389.991
+  },
+  {
+   "name": "1792080390593_step_02_click.png",
+   "ts": 1792080390.593
+  },
+  {
+   "name": "1792080391186_step_03_click.png",
+   "ts": 1792080391.186
+  },
+  {
+   "name": "1792080391759_step_04_click.png",
+   "ts": 1792080391.759
+  },
+  {
+   "name": "1792080391804_step_04_click_escalate.png",
+   "ts": 1792080391.804
+  },
+  {
+   "name": "1792080395859_post_escalation_check.png",
+   "ts": 1792080395.859
+  }
+ ],
+ "result": {
+  "capability_id": "open_member_subaccount",
+  "escalation_used": true,
+  "evidence_dir": "/Users/akshay/Desktop/Projects/interface-ai-computeruse-final/evidence/sessions/replay-20261015T120628-a76751",
+  "expected": null,
+  "failed_step_id": null,
+  "label": "completed_via_human_operator",
+  "observed": null,
+  "outputs": {
+   "account_number": "CHK-10002-02"
+  },
+  "status": "success",
+  "trace": [
+   {
+    "action": "type",
+    "detail": "no error handler matched",
+    "screenshot_path": null,
+    "status": "ok",
+    "step_id": "step_01_type"
+   },
+   {
+    "action": "click",
+    "detail": "no error handler matched",
+    "screenshot_path": null,
+    "status": "ok",
+    "step_id": "step_02_click"
+   },
+   {
+    "action": "click",
+    "detail": "no error handler matched",
+    "screenshot_path": null,
+    "status": "ok",
+    "step_id": "step_03_click"
+   },
+   {
+    "action": "click",
+    "detail": "handler 'permission_denied' matched",
+    "screenshot_path": null,
+    "status": "matched_handler",
+    "step_id": "step_04_click"
+   }
+  ]
+ },
+ "control": {
+  "reason": "Member is restricted; requires supervisor override (see escalation path).",
+  "human_actions": [
+   {
+    "action": "type",
+    "element": "Supervisor PIN:",
+    "text": "[REDACTED]",
+    "ts": 1792080393.8349388
+   },
+   {
+    "action": "select",
+    "element": "Account Type:",
+    "value": "Checking",
+    "ts": 1792080394.3231528
+   },
+   {
+    "action": "click",
+    "element": "Submit Override",
+    "ts": 1792080394.3690538
+   }
+  ],
+  "resolution": "completed"
+ },
+ "elapsed": 8.8,
+ "source_run": "replay-20261015T120628-a76751"
+}

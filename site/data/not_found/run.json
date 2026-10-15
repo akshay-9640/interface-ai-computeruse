@@ -1,0 +1,82 @@
+{
+ "scenario": "not_found",
+ "title": "Member does not exist",
+ "events": [
+  {
+   "ts": 1792080384.052358,
+   "event": "run_started",
+   "kind": "replay",
+   "label": "open_member_subaccount"
+  },
+  {
+   "ts": 1792080386.008984,
+   "event": "auto_login",
+   "base_url": "http://127.0.0.1:5001"
+  },
+  {
+   "ts": 1792080386.009969,
+   "event": "params_bound",
+   "member_id": "99999",
+   "account_type": "Savings",
+   "initial_deposit": 100.0
+  },
+  {
+   "ts": 1792080386.069003,
+   "event": "step_executed",
+   "step_id": "step_01_type",
+   "action": "type",
+   "url": "http://127.0.0.1:5001/search",
+   "matched_handler": null
+  },
+  {
+   "ts": 1792080386.67454,
+   "event": "step_executed",
+   "step_id": "step_02_click",
+   "action": "click",
+   "url": "http://127.0.0.1:5001/search?q=99999",
+   "matched_handler": "member_not_found"
+  }
+ ],
+ "shots": [
+  {
+   "name": "1792080386048_step_01_type.png",
+   "ts": 1792080386.048
+  },
+  {
+   "name": "1792080386632_step_02_click.png",
+   "ts": 1792080386.632
+  }
+ ],
+ "result": {
+  "capability_id": "open_member_subaccount",
+  "escalation_used": false,
+  "evidence_dir": "/Users/akshay/Desktop/Projects/interface-ai-computeruse-final/evidence/sessions/replay-20261015T120624-0941c7",
+  "expected": null,
+  "failed_step_id": null,
+  "label": "No member found for the given ID.",
+  "observed": null,
+  "outputs": {
+   "found": "false"
+  },
+  "status": "business_outcome",
+  "trace": [
+   {
+    "action": "type",
+    "detail": "no error handler matched",
+    "screenshot_path": null,
+    "status": "ok",
+    "step_id": "step_01_type"
+   },
+   {
+    "action": "click",
+    "detail": "handler 'member_not_found' matched",
+    "screenshot_path": null,
+    "status": "matched_handler",
+    "step_id": "step_02_click"
+   }
+  ]
+ },
+ "control": null,
+ "elapsed": 3.7,
+ "source_run": "replay-20261015T120624-0941c7"
+}

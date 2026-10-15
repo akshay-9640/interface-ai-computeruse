@@ -1,0 +1,190 @@
+{
+ "scenario": "dry_run",
+ "title": "Replay to the confirmation screen",
+ "events": [
+  {
+   "ts": 1792080370.904674,
+   "event": "run_started",
+   "kind": "replay",
+   "label": "open_member_subaccount"
+  },
+  {
+   "ts": 1792080373.377974,
+   "event": "auto_login",
+   "base_url": "http://127.0.0.1:5001"
+  },
+  {
+   "ts": 1792080373.378706,
+   "event": "params_bound",
+   "member_id": "10001",
+   "account_type": "Savings",
+   "initial_deposit": 100.0
+  },
+  {
+   "ts": 1792080373.456987,
+   "event": "step_executed",
+   "step_id": "step_01_type",
+   "action": "type",
+   "url": "http://127.0.0.1:5001/search",
+   "matched_handler": null
+  },
+  {
+   "ts": 1792080374.059338,
+   "event": "step_executed",
+   "step_id": "step_02_click",
+   "action": "click",
+   "url": "http://127.0.0.1:5001/search?q=10001",
+   "matched_handler": null
+  },
+  {
+   "ts": 1792080374.656785,
+   "event": "step_executed",
+   "step_id": "step_03_click",
+   "action": "click",
+   "url": "http://127.0.0.1:5001/members/10001",
+   "matched_handler": null
+  },
+  {
+   "ts": 1792080375.230311,
+   "event": "step_executed",
+   "step_id": "step_04_click",
+   "action": "click",
+   "url": "http://127.0.0.1:5001/members/10001/new-subaccount",
+   "matched_handler": null
+  },
+  {
+   "ts": 1792080375.263359,
+   "event": "step_executed",
+   "step_id": "step_05_select",
+   "action": "select",
+   "url": "http://127.0.0.1:5001/members/10001/new-subaccount",
+   "matched_handler": null
+  },
+  {
+   "ts": 1792080375.3138728,
+   "event": "step_executed",
+   "step_id": "step_06_type",
+   "action": "type",
+   "url": "http://127.0.0.1:5001/members/10001/new-subaccount",
+   "matched_handler": null
+  },
+  {
+   "ts": 1792080375.9048052,
+   "event": "step_executed",
+   "step_id": "step_07_click",
+   "action": "click",
+   "url": "http://127.0.0.1:5001/members/10001/new-subaccount",
+   "matched_handler": null
+  },
+  {
+   "ts": 1792080375.9050062,
+   "event": "skipped_unconfirmed_step",
+   "step_id": "step_confirm_finalize"
+  },
+  {
+   "ts": 1792080375.906944,
+   "event": "pending_confirmation",
+   "checkpoint": "Successfully reached the confirmation screen for opening a new sub-account. The page shows the review information for member Alice Rivera (10001) with Account Type: Savings and Initial Deposit: $100.00. As instructed, I have NOT clicked the \"Confirm and Open Account\" button - the goal was to reach the confirmation screen, which has been achieved."
+  }
+ ],
+ "shots": [
+  {
+   "name": "1792080373422_step_01_type.png",
+   "ts": 1792080373.422
+  },
+  {
+   "name": "1792080374017_step_02_click.png",
+   "ts": 1792080374.017
+  },
+  {
+   "name": "1792080374611_step_03_click.png",
+   "ts": 1792080374.611
+  },
+  {
+   "name": "1792080375189_step_04_click.png",
+   "ts": 1792080375.189
+  },
+  {
+   "name": "1792080375243_step_05_select.png",
+   "ts": 1792080375.243
+  },
+  {
+   "name": "1792080375279_step_06_type.png",
+   "ts": 1792080375.279
+  },
+  {
+   "name": "1792080375862_step_07_click.png",
+   "ts": 1792080375.862
+  }
+ ],
+ "result": {
+  "capability_id": "open_member_subaccount",
+  "escalation_used": false,
+  "evidence_dir": "/Users/akshay/Desktop/Projects/interface-ai-computeruse-final/evidence/sessions/replay-20261015T120610-01583b",
+  "expected": null,
+  "failed_step_id": null,
+  "label": "pending_confirmation",
+  "observed": null,
+  "outputs": {
+   "_note": "This capability reached its confirmation checkpoint but was not finalized because confirm=True was not supplied. Re-invoke with confirm=True to complete the irreversible step.",
+   "account_type": "Savings",
+   "initial_deposit": "100.0",
+   "member_id": "10001"
+  },
+  "status": "business_outcome",
+  "trace": [
+   {
+    "action": "type",
+    "detail": "no error handler matched",
+    "screenshot_path": null,
+    "status": "ok",
+    "step_id": "step_01_type"
+   },
+   {
+    "action": "click",
+    "detail": "no error handler matched",
+    "screenshot_path": null,
+    "status": "ok",
+    "step_id": "step_02_click"
+   },
+   {
+    "action": "click",
+    "detail": "no error handler matched",
+    "screenshot_path": null,
+    "status": "ok",
+    "step_id": "step_03_click"
+   },
+   {
+    "action": "click",
+    "detail": "no error handler matched",
+    "screenshot_path": null,
+    "status": "ok",
+    "step_id": "step_04_click"
+   },
+   {
+    "action": "select",
+    "detail": "no error handler matched",
+    "screenshot_path": null,
+    "status": "ok",
+    "step_id": "step_05_select"
+   },
+   {
+    "action": "type",
+    "detail": "no error handler matched",
+    "screenshot_path": null,
+    "status": "ok",
+    "step_id": "step_06_type"
+   },
+   {
+    "action": "click",
+    "detail": "no error handler matched",
+    "screenshot_path": null,
+    "status": "ok",
+    "step_id": "step_07_click"
+   }
+  ]
+ },
+ "control": null,
+ "elapsed": 6.1,
+ "source_run": "replay-20261015T120610-01583b"
+}

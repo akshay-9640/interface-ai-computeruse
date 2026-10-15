@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#003366">
+<title>Computer-Use Replay Demo</title>
+<meta name="description" content="An LLM agent discovers a legacy banking workflow once; deterministic replay runs it with no LLM, with error handling and a human handoff. Recorded runs of the real system.">
+<style>
+  :root {
+    --bg: #f4f6f9; --card: #ffffff; --line: rgba(10,37,64,.12); --ink: #0a2540;
+    --muted: rgba(10,37,64,.72); --faint: rgba(10,37,64,.52); --navy: #003366;
+    --ok: #1a7f37; --warn: #9a6700; --bad: #cf222e; --info: #0969da;
+    --r-lg: 16px; --r-md: 12px; --r-sm: 8px;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  a { color: var(--ink); }
+  code { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 32px 16px 80px; }
+  header h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); line-height: 1.08; letter-spacing: -0.025em; margin: 0 0 12px; }
+  header h1 span { color: var(--faint); }
+  header p { color: var(--muted); max-width: 62ch; margin: 0 0 16px; }
+  .links { display: flex; gap: 16px; flex-wrap: wrap; font-size: 14px; }
+  .links a { color: var(--muted); }
+  .links a:hover { color: var(--ink); }
+  .recorded { margin-top: 20px; padding: 12px 16px; border-radius: var(--r-md); background: #eaf1fb; border: 1px solid rgba(9,105,218,.25); font-size: 14px; color: var(--muted); max-width: 80ch; }
+  .recorded b { color: var(--ink); }
+  nav.tabs { display: flex; gap: 4px; margin: 32px 0 20px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+  nav.tabs button { background: none; border: 0; color: var(--muted); padding: 10px 14px; font: inherit; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; }
+  nav.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--navy); font-weight: 600; }
+  .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 16px; box-shadow: 0 1px 2px rgba(10,37,64,.04); }
+  .scenario { display: flex; flex-direction: column; gap: 8px; }
+  .scenario h3 { margin: 0; font-size: 16px; letter-spacing: -0.01em; }
+  .scenario p { margin: 0; color: var(--muted); font-size: 14px; }
+  .params { font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--faint); }
+  .btn { margin-top: auto; align-self: flex-start; background: var(--navy); color: #fff; border: 0; border-radius: 999px; padding: 9px 16px; font: 600 14px system-ui, sans-serif; cursor: pointer; transition: transform .1s ease-out, background .15s; }
+  .btn:hover { background: #0a2540; }
+  .btn:active { transform: scale(.97); }
+  #run { margin-top: 20px; display: none; }
+  .runhead { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+  .runhead h2 { margin: 0; font-size: 18px; letter-spacing: -0.015em; }
+  .pill { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px; border: 1px solid currentColor; }
+  .pill.running { color: var(--info); } .pill.escalated { color: var(--warn); }
+  .pill.done { color: var(--ok); } .pill.failure { color: var(--bad); }
+  .muted { color: var(--muted); } .faint { color: var(--faint); font-size: 13px; }
+  .split { display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); }
+  @media (max-width: 820px) { .split { grid-template-columns: 1fr; } }
+  ol.steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+  ol.steps li { display: grid; grid-template-columns: 18px 1fr; gap: 8px; padding: 6px 4px; font-size: 14px; border-radius: var(--r-sm); }
+  ol.steps li .dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 7px; background: var(--faint); }
+  ol.steps li.ok .dot { background: var(--ok); } ol.steps li.warn .dot { background: var(--warn); }
+  ol.steps li.bad .dot { background: var(--bad); } ol.steps li.info .dot { background: var(--info); }
+  ol.steps .sub { color: var(--faint); font-size: 12px; overflow-wrap: anywhere; }
+  .viewer img { width: 100%; display: block; aspect-ratio: 16 / 8; object-fit: cover; object-position: top center; border-radius: var(--r-md); border: 1px solid var(--line); background: #d9d9d9; }
+  .thumbs { display: flex; gap: 6px; overflow-x: auto; margin-top: 8px; padding-bottom: 4px; }
+  .thumbs img { height: 54px; aspect-ratio: 16 / 8; object-fit: cover; object-position: top center; border-radius: 6px; border: 1px solid var(--line); cursor: pointer; opacity: .6; }
+  .thumbs img.on { opacity: 1; border-color: var(--ink); }
+  .esc { border-color: rgba(154,103,0,.45); background: #fffbf0; margin-top: 12px; }
+  .esc h3 { margin: 0 0 6px; font-size: 16px; }
+  .result dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; margin: 0; font-size: 14px; }
+  .result dt { color: var(--faint); }
+  .result dd { margin: 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
+  pre { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 16px; overflow: auto; font-size: 12.5px; line-height: 1.5; max-height: 70vh; }
+  .disc { display: flex; flex-direction: column; gap: 12px; }
+  .disc .card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+  @media (max-width: 820px) { .disc .card { grid-template-columns: 1fr; } }
+  .disc .reason { font-size: 14px; }
+  .disc .meta { font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--faint); margin-bottom: 6px; }
+  .disc img { width: 100%; aspect-ratio: 16 / 8; object-fit: cover; object-position: top center; border-radius: var(--r-md); border: 1px solid var(--line); background: #d9d9d9; }
+  .note { font-size: 13px; color: var(--faint); margin-top: 8px; }
+  [hidden] { display: none !important; }
+  @media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1><span>Learn the workflow once.</span> Replay it without the LLM.</h1>
+    <p>A Claude tool-calling agent explored Meridian Core, a deliberately legacy banking back office, and compiled the flow into a typed, versioned capability artifact. Replay then drives a real headless browser from that artifact alone, with no model in the loop, plus error handling and a human handoff.</p>
+    <div class="links">
+      <a href="https://github.com/akshay-9640/interface-ai-computeruse" target="_blank" rel="noreferrer">Source on GitHub</a>
+      <a href="https://github.com/akshay-9640/interface-ai-computeruse/blob/main/REPORT.md" target="_blank" rel="noreferrer">Design write-up</a>
+      <a href="https://github.com/akshay-9640/interface-ai-computeruse#live-demo" target="_blank" rel="noreferrer">Run it live yourself</a>
+    </div>
+    <div class="recorded"><b>Recorded runs.</b> Every scenario below was executed for real<span id="rec-date"></span> by the unchanged replay engine and operator console. This page plays back each run's actual event log and screenshots on their recorded timeline. Nothing here is mocked up.</div>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-tab="replay">Replay scenarios</button>
+    <button role="tab" aria-selected="false" data-tab="discovery">Discovery run (LLM)</button>
+    <button role="tab" aria-selected="false" data-tab="artifact">Capability artifact</button>
+  </nav>
+
+  <section id="tab-replay">
+    <div class="grid" id="cards"></div>
+    <div id="run">
+      <div class="runhead">
+        <h2 id="run-title"></h2>
+        <span id="run-pill" class="pill running">running</span>
+        <span id="run-time" class="faint"></span>
+      </div>
+      <div class="split">
+        <div class="card">
+          <ol class="steps" id="steps"></ol>
+          <div class="card esc" id="esc" hidden>
+            <h3 id="esc-title">Waiting for a human</h3>
+            <p class="muted" id="esc-reason"></p>
+            <p class="faint" id="esc-help">The replay paused and kept holding the live browser. A supervisor knows the override PIN; the automation never does. The human's actions went into the audit log with the PIN redacted.</p>
+            <button class="btn" id="op-btn">Act as supervisor</button>
+            <ol class="steps" id="human" style="margin-top:10px"></ol>
+          </div>
+          <div class="result" id="result" hidden style="margin-top:12px"></div>
+        </div>
+        <div class="viewer">
+          <img id="shot" alt="Screenshot from the replay browser" hidden>
+          <div class="thumbs" id="thumbs"></div>
+          <p class="faint" id="shot-cap"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tab-discovery" hidden>
+    <p class="muted">The one-time discovery run that produced the artifact: Claude chose each action from a numbered list of on-screen elements and explained why. This is the saved evidence from that run.</p>
+    <div class="disc" id="disc"></div>
+  </section>
+
+  <section id="tab-artifact" hidden>
+    <p class="muted">What replay reads: parameterized steps, ranked locator fallbacks, the checkpoint, the risky step gated behind confirm, and the error taxonomy.</p>
+    <pre id="artifact">Loading...</pre>
+  </section>
+</div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const getJSON = async (p) => (await fetch(p)).json();
+
+// ---------- tabs
+document.querySelectorAll("nav.tabs button").forEach((b) => b.addEventListener("click", () => {
+  document.querySelectorAll("nav.tabs button").forEach((x) => x.setAttribute("aria-selected", x === b));
+  ["replay", "discovery", "artifact"].forEach((t) => ($("#tab-" + t).hidden = t !== b.dataset.tab));
+  if (b.dataset.tab === "discovery") loadDiscovery();
+  if (b.dataset.tab === "artifact") loadArtifact();
+}));
+
+// ---------- scenario cards
+(async () => {
+  const meta = await getJSON("data/scenarios.json");
+  $("#rec-date").textContent = " on " + meta.recorded_at;
+  $("#cards").innerHTML = meta.scenarios.map((s) => `
+    <div class="card scenario">
+      <h3>${esc(s.title)}</h3>
+      <p>${esc(s.expect)}</p>
+      <div class="params">${Object.entries(s.params).map(([k, v]) => esc(k + "=" + v)).join(" ")}${s.confirm ? " confirm=True" : ""}</div>
+      <button class="btn" data-run="${esc(s.key)}">Play run</button>
+    </div>`).join("");
+  document.querySelectorAll("[data-run]").forEach((b) => b.addEventListener("click", () => play(b.dataset.run)));
+})();
+
+// ---------- playback
+let timers = [], view = null, clock = null;
+
+const LABEL = {
+  run_started: () => ["Replay started", "info"],
+  auto_login: () => ["Signed in by the harness (credentials never touch the artifact)", "info"],
+  params_bound: (e) => ["Parameters bound and type-checked", "info", Object.entries(e).filter(([k]) => !["ts", "event"].includes(k)).map(([k, v]) => k + "=" + v).join("  ")],
+  step_executed: (e) => [e.step_id.replace(/^step_/, "Step ").replace(/_/g, " "), e.matched_handler ? "warn" : "ok", (e.matched_handler ? "matched handler: " + e.matched_handler + "  " : "") + new URL(e.url).pathname],
+  recovery_attempt: (e) => ["Recovering from " + e.handler + ", attempt " + e.attempt, "warn"],
+  skipped_unconfirmed_step: (e) => ["Risky final step gated: confirm not given", "warn", e.step_id],
+  pending_confirmation: () => ["Stopped at the confirmation checkpoint", "ok"],
+  escalation_requested: (e) => ["Escalated to a human", "warn", e.reason],
+  escalation_resolved: (e) => ["Human handed control back: " + e.resolution, e.resolution === "completed" ? "ok" : "bad"],
+  finalized_via_escalation: () => ["Verified the human's path reached a terminal success page", "ok"],
+  post_confirmation_verified: () => ["Post-confirmation state verified by extracting outputs", "ok"],
+  checkpoint_verified: () => ["Checkpoint verified", "ok"],
+};
+
+function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+function stop() { timers.forEach(clearTimeout); timers = []; clearInterval(clock); }
+
+async function play(key) {
+  stop();
+  const rec = await getJSON(`data/${key}/run.json`);
+  view = { rec, key, events: [], shots: [], human: [], status: "running", pinned: null, started: performance.now(), waiting: false };
+  $("#run").style.display = "block";
+  $("#run-title").textContent = rec.title;
+  ["#steps", "#human", "#thumbs"].forEach((s) => ($(s).innerHTML = ""));
+  $("#result").hidden = true; $("#esc").hidden = true; $("#shot").hidden = true; $("#shot-cap").textContent = "";
+  $("#run").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+  clock = setInterval(() => { if (!view.waiting) $("#run-time").textContent = ((performance.now() - view.started) / 1000).toFixed(1) + "s"; }, 100);
+
+  const t0 = rec.events[0].ts;
+  const escEv = rec.events.find((e) => e.event === "escalation_requested");
+  const cut = escEv ? escEv.ts + 0.5 : Infinity;          // the escalation screenshot lands just before the event
+  const items = [
+    ...rec.events.map((e) => ({ ts: e.ts, kind: "event", e })),
+    ...rec.shots.map((s) => ({ ts: s.ts, kind: "shot", s })),
+  ].sort((a, b) => a.ts - b.ts);
+
+  items.filter((i) => i.ts <= cut).forEach((i) => later(() => apply(i), (i.ts - t0) * 1000));
+  if (escEv) {
+    later(() => { view.status = "escalated"; view.waiting = true; render(); }, (escEv.ts - t0) * 1000 + 50);
+    $("#op-btn").onclick = () => resume(items.filter((i) => i.ts > cut));
+  } else {
+    later(finish, (items[items.length - 1].ts - t0) * 1000 + 300);
+  }
+}
+
+function resume(rest) {
+  const rec = view.rec;
+  view.waiting = false; view.status = "running"; view.operatorUsed = true;
+  view.started = performance.now() - ((rec.events.find((e) => e.event === "escalation_requested").ts - rec.events[0].ts) * 1000);
+  const actions = (rec.control && rec.control.human_actions) || [];
+  const t1 = actions.length ? actions[0].ts : (rest[0] ? rest[0].ts : 0);
+  actions.forEach((a) => later(() => { view.human.push(a); render(); }, (a.ts - t1) * 1000));
+  rest.forEach((i) => later(() => apply(i), Math.max(0, (i.ts - t1) * 1000)));
+  const end = rest.length ? rest[rest.length - 1].ts : t1;
+  later(finish, (end - t1) * 1000 + 300);
+  render();
+}
+
+function apply(i) {
+  if (i.kind === "event") view.events.push(i.e); else view.shots.push(i.s.name);
+  render();
+}
+
+function finish() {
+  view.status = "done";
+  clearInterval(clock);
+  $("#run-time").textContent = view.rec.elapsed + "s recorded";
+  render();
+}
+
+function render() {
+  const { rec, key } = view;
+  const r = rec.result || {};
+  const done = view.status === "done";
+  $("#run-pill").className = "pill " + (done ? (["success", "business_outcome"].includes(r.status) ? "done" : "failure") : view.status);
+  $("#run-pill").textContent = done ? r.status : view.status;
+
+  $("#steps").innerHTML = view.events.map((e) => {
+    const f = LABEL[e.event]; if (!f) return "";
+    const [title, cls, sub] = f(e);
+    return `<li class="${cls}"><span class="dot"></span><span>${esc(title)}${sub ? `<div class="sub">${esc(sub)}</div>` : ""}</span></li>`;
+  }).join("");
+
+  if (view.shots.length) {
+    const url = (n) => `data/${key}/shots/${encodeURIComponent(n)}`;
+    const show = view.pinned && view.shots.includes(view.pinned) ? view.pinned : view.shots[view.shots.length - 1];
+    $("#thumbs").innerHTML = view.shots.map((n) => `<img src="${url(n)}" data-n="${esc(n)}" alt="${esc(caption(n))}" class="${n === show ? "on" : ""}">`).join("");
+    $("#shot").src = url(show); $("#shot").hidden = false; $("#shot-cap").textContent = caption(show);
+    $("#thumbs").querySelectorAll("img").forEach((img) => (img.onclick = () => { view.pinned = img.dataset.n; render(); }));
+  }
+
+  if (rec.control && (view.status === "escalated" || view.operatorUsed)) {
+    $("#esc").hidden = false;
+    $("#esc-reason").textContent = rec.control.reason || "";
+    $("#op-btn").hidden = !view.waiting;
+    $("#esc-help").hidden = !view.waiting;
+    $("#esc-title").textContent = view.waiting ? "Waiting for a human" : "Human handoff, same live browser";
+    $("#human").innerHTML = view.human.map((a) =>
+      `<li class="info"><span class="dot"></span><span>Human ${esc(a.action)}: ${esc(a.element)}${a.text ? ` <span class="sub">typed ${esc(a.text)}</span>` : ""}${a.value ? ` <span class="sub">${esc(a.value)}</span>` : ""}</span></li>`).join("");
+  }
+
+  if (done) {
+    const outs = Object.entries(r.outputs || {}).filter(([k]) => !k.startsWith("_"));
+    $("#result").hidden = false;
+    $("#result").innerHTML = `<dl>
+      <dt>status</dt><dd>${esc(r.status)}</dd>
+      ${r.label ? `<dt>label</dt><dd>${esc(r.label)}</dd>` : ""}
+      ${outs.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}
+      <dt>escalation_used</dt><dd>${esc(r.escalation_used)}</dd>
+    </dl>`;
+  }
+}
+
+function caption(n) { return n.replace(/^\d+_/, "").replace(/\.png$/, "").replace(/_/g, " "); }
+
+// ---------- discovery
+let discLoaded = false;
+async function loadDiscovery() {
+  if (discLoaded) return; discLoaded = true;
+  const d = await getJSON("data/discovery/run.json");
+  const shotFor = (step) => d.shots.find((s) => new RegExp("_step0?" + step + "_").test(s.name));
+  $("#disc").innerHTML = d.events.filter((e) => e.event === "llm_decision").map((e) => {
+    const inp = e.input || {}; const shot = shotFor(e.step);
+    const what = [inp.text && `text="${inp.text}"`, inp.value && `value="${inp.value}"`, inp.index !== undefined && `element #${inp.index}`].filter(Boolean).join("  ");
+    return `<div class="card"><div><div class="meta">step ${esc(e.step)}  ${esc(e.tool)}  ${esc(what)}</div>
+      <div class="reason">${esc(inp.reasoning || inp.summary || inp.raw || "")}</div></div>
+      ${shot ? `<img src="data/discovery/shots/${encodeURIComponent(shot.name)}" alt="Browser after step ${esc(e.step)}" loading="lazy">` : "<div></div>"}</div>`;
+  }).join("");
+}
+
+// ---------- artifact
+let artLoaded = false;
+async function loadArtifact() {
+  if (artLoaded) return; artLoaded = true;
+  $("#artifact").textContent = JSON.stringify(await getJSON("data/artifact.json"), null, 2);
+}
+</script>
+</body>
+</html>

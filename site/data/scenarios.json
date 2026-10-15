@@ -1,0 +1,49 @@
+{
+ "recorded_at": "2026-10-15",
+ "scenarios": [
+  {
+   "key": "dry_run",
+   "title": "Replay to the confirmation screen",
+   "expect": "Stops at the gated, irreversible step: business_outcome / pending_confirmation.",
+   "params": {
+    "member_id": "10001",
+    "account_type": "Savings",
+    "initial_deposit": "100.00"
+   },
+   "confirm": false
+  },
+  {
+   "key": "confirm",
+   "title": "Replay with confirm=True",
+   "expect": "Executes the risky final click and extracts the new account number.",
+   "params": {
+    "member_id": "10001",
+    "account_type": "Savings",
+    "initial_deposit": "100.00"
+   },
+   "confirm": true
+  },
+  {
+   "key": "not_found",
+   "title": "Member does not exist",
+   "expect": "The error taxonomy turns the not-found page into a clean business_outcome, not a crash.",
+   "params": {
+    "member_id": "99999",
+    "account_type": "Savings",
+    "initial_deposit": "100.00"
+   },
+   "confirm": false
+  },
+  {
+   "key": "escalation",
+   "title": "Restricted member, human escalation",
+   "expect": "Hard failure, so replay pauses and hands the live browser to a human supervisor.",
+   "params": {
+    "member_id": "10002",
+    "account_type": "Checking",
+    "initial_deposit": "100.00"
+   },
+   "confirm": true
+  }
+ ]
+}

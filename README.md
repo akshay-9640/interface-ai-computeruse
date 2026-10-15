@@ -21,6 +21,12 @@ into the real `manage.py operator`, attached to the same paused browser). It als
 shows the saved discovery run, with Claude's stated reasoning per step, and the
 artifact JSON. Nothing calls an LLM, so it needs no API key and costs nothing per visit.
 
+There is also a **recorded, static version** (`site/`, deployed on Vercel via
+`vercel.json`): the same console, playing back real runs of every scenario
+(event log, screenshots, result, and the human handoff) on their recorded
+timeline. It loads instantly and needs no server. To refresh the recordings,
+start the live demo locally and run `python -m demo.record`.
+
 Run it locally:
 
 ```bash
